@@ -21,6 +21,9 @@
 
 
 async function uploadImageToFirebase(id, file){
+
+  var uuid = getOrCreateUserId();
+
   // 2️⃣ Upload Firebase
   try {
     const filename = `${id}_${Date.now()}_${file.name}`;
@@ -31,6 +34,7 @@ async function uploadImageToFirebase(id, file){
     await addDoc(collection(db, "poze_misiuni"), {
       missionId: id,
       imageUrl: url,
+      userId : uuid,
       timestamp: new Date()
     });
 
@@ -76,7 +80,6 @@ function MissionCard({ id, title, description }) {
     <input 
       type="file" 
       accept="image/*" 
-      capture="camera" 
       style="display:none" 
       id="fileInput${id}" 
     />
@@ -147,7 +150,7 @@ const missions = [
   { id: 3, title: "Misiunea 3", description: "Fa o poza cu nasii" },
   { id: 4, title: "Misiunea 4", description: "Fa o poza random" },
   { id: 5, title: "Misiunea 5", description: "Fa o poza la momentul sampania mirelui" },
-  { id: 6, title: "Misiunea 5", description: "Cauta-l pe Gabriel Luta si zi-i ca ai terminat" },
+  { id: 6, title: "Misiunea 6", description: "Cauta-l pe Gabriel Luta si zi-i ca ai terminat" },
 
 ];
 
@@ -155,3 +158,30 @@ const missions = [
 const container = document.getElementById("missions");
 missions.forEach(mission => container.appendChild(MissionCard(mission)));
 
+////////////////////////////////////////////////////////////////////////////////
+
+// 🔹 Funcție pentru generarea unui UUID unic
+function generateUUID() {
+  return crypto.randomUUID(); // API nativ (modern)
+}
+
+// 🔹 Funcție care ia sau creează un user ID unic
+function getOrCreateUserId() {
+  let userId = localStorage.getItem("user_id");
+
+  if (!userId) {
+    userId = generateUUID();
+    localStorage.setItem("user_id", userId);
+    console.log("🆕 User ID creat:", userId);
+  } else {
+    console.log("✅ User ID existent:", userId);
+  }
+
+  return userId;
+}
+
+// 🔹 La pornirea aplicației
+window.addEventListener("DOMContentLoaded", () => {
+  const userId = getOrCreateUserId();
+  // Acum poți folosi `userId` în restul aplicației
+});
