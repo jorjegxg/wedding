@@ -83,10 +83,11 @@ function MissionCard({ id, title, description }) {
   button.addEventListener("click", () => input.click());
 
   // 3️⃣ La selectarea pozei, afișăm și salvăm în localStorage
-  input.addEventListener("change", (event) => {
+ input.addEventListener("change", async (event) => {
   const file = event.target.files[0];
   if (!file) return;
 
+  // 1️⃣ Preview și salvare în localStorage
   const reader = new FileReader();
   reader.onload = (e) => {
     const img = new Image();
@@ -101,7 +102,7 @@ function MissionCard({ id, title, description }) {
       const ctx = canvas.getContext("2d");
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-      const dataUrl = canvas.toDataURL("image/jpeg", 0.7); // comprimare 70%
+      const dataUrl = canvas.toDataURL("image/jpeg", 0.7);
       const preview = document.getElementById(`preview${id}`);
       preview.src = dataUrl;
       preview.style.display = "block";
@@ -115,7 +116,26 @@ function MissionCard({ id, title, description }) {
     };
   };
   reader.readAsDataURL(file);
+
+  // 2️⃣ Upload Firebase
+  try {
+    const filename = `${id}_${Date.now()}_${file.name}`;
+    const storageRef = ref(storage, `misiuni/${id}/${filename}`);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+
+    await addDoc(collection(db, "poze_misiuni"), {
+      missionId: id,
+      imageUrl: url,
+      timestamp: new Date()
+    });
+
+    console.log("Poză încărcată și URL salvat:", url);
+  } catch (error) {
+    console.error("Eroare la upload:", error);
+  }
 });
+
 
 
   return card;
