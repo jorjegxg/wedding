@@ -147,10 +147,12 @@ function MissionCard({ id, title, description }) {
 const missions = [
   { id: 1, title: "Misiunea 1", description: "Fa o poza cu mireasa" },
   { id: 2, title: "Misiunea 2", description: "Fa o poza cu ce ai in momentul asta in fata" },
-  { id: 3, title: "Misiunea 3", description: "Fa o poza cu nasii" },
+  { id: 3, title: "Misiunea 3", description: "Fa o poza cu un scaun" },
   { id: 4, title: "Misiunea 4", description: "Fa o poza random" },
-  { id: 5, title: "Misiunea 5", description: "Fa o poza la momentul sampania mirelui" },
+  { id: 5, title: "Misiunea 5", description: "Fa o poza la bautura ta favorita" },
   { id: 6, title: "Misiunea 6", description: "Cauta-l pe Gabriel Luta si zi-i ca ai terminat" },
+  { id: 7, title: "Misiunea 7", description: "Fa o poza la felul 3" },
+  { id: 8, title: "Misiunea 8", description: "Fa o poza la fotograf" },
 
 ];
 
